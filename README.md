@@ -56,3 +56,56 @@ let products: [Product] = [
 let invoice = Invoice(products: products, discountPercentage: 20)
 invoice.printInvoice()
 ```
+
+Problem Solved (This is a SRP Code)
+
+```swift
+struct Product {
+    let price: Double
+}
+
+struct Invoice {
+    var products: [Product]
+    let id = NSUUID().uuidString
+    var discountPercentage: Double = 0
+    
+    var total: Double {
+        let total = products.map({$0.price}).reduce(0, {$0 + $1})
+        let discountedAmount = total * (discountPercentage / 100)
+        return total - discountedAmount
+    }
+}
+
+struct InvoicePrinter {
+    let invoice: Invoice
+    
+    func printInvoice() {
+        print("----------------------")
+        print("Invoice id: \(invoice.id)")
+        print("Total cost $\(invoice.total)")
+        print("Discounts: \(invoice.discountPercentage)")
+        print("----------------------")
+    }
+}
+
+struct InvoicePersistence {
+    let invoice: Invoice
+    func saveInvoice() {
+        // Save invoice data locally or to database
+    }
+}
+
+let products: [Product] = [
+    .init(price: 99.99),
+    .init(price: 9.99),
+    .init(price: 24.99)
+]
+
+let invoice = Invoice(products: products, discountPercentage: 20)
+let printer = InvoicePrinter(invoice: invoice)
+let persistence = InvoicePersistence(invoice: invoice)
+
+printer.printInvoice()
+persistence.saveInvoice()
+```
+
