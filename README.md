@@ -170,3 +170,46 @@ let invoice2 = Invoice(products: products)
 invoice2.printInvoice()
 ```
 
+
+## Open/Closed Principle (OCP)
+
+SOFTWARE ENTITIES (CLASSES, MODULES, FUNCTIONS, ETC.) SHOULD BE OPEN FOR EXTENSION, BUT CLOSED FOR MODIFICATION. In other words, we can add additional functionality (extention) without touching the existing code (modification) of an object.
+
+Unsuitable Code
+
+```swift
+struct InvoicePersistenceOCP {
+    let invoice: Invoice
+    
+    func saveInvoiceToCoreData() {
+        print("Save invoice to CoreData \(invoice.id)")
+    }
+    
+    func saveInvoiceToDatabase() {
+        print("Save invoice to Firestore \(invoice.id)")
+    }
+}
+```
+
+
+Suitable Code
+
+```swift
+protocol InvoicePersistable {
+    func save(invoice: Invoice)
+}
+
+struct CoreDataPersistence: InvoicePersistable {
+    func save(invoice: Invoice) {
+        print("Save invoice to CoreData \(invoice.id)")
+    }
+}
+
+struct DatabasePersistence: InvoicePersistable {
+    func save(invoice: Invoice) {
+        print("Save invoice to Firestore \(invoice.id)")
+    }
+}
+```
+
+
