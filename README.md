@@ -212,4 +212,46 @@ struct DatabasePersistence: InvoicePersistable {
 }
 ```
 
+## Liskov Substitution Principle (LSP)
+
+Derived or child classes/structures must be substitutable for their base or parent classes
+
+Unsuitable Code
+
+```swift
+class Bird {
+    func fly() {
+    }
+}
+
+class Ostrich: Bird {
+    override func fly() {
+        fatalError("Ostriches can't fly")
+    }
+}
+```
+
+Suitable Code
+
+```swift
+class Bird {
+    // General bird criteria
+}
+
+class FlyingBird: Bird {
+    func fly() {
+    }
+}
+
+class Sparrow: FlyingBird {
+    // Sparrow Criteria
+}
+
+class Ostrich: Bird {
+    // Ostrich Criteria
+}
+```
+
+
+
 
