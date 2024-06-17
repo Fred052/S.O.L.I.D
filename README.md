@@ -109,3 +109,64 @@ printer.printInvoice()
 persistence.saveInvoice()
 ```
 
+Or Other Way 
+
+```swift
+struct Product {
+    let price: Double
+}
+
+struct Invoice {
+    var products: [Product]
+    let id = NSUUID().uuidString
+    var discountPercentage: Double = 0
+    
+    var total: Double {
+        let total = products.map({$0.price}).reduce(0, {$0 + $1})
+        let discountedAmount = total * (discountPercentage / 100)
+        return total - discountedAmount
+    }
+    
+    func printInvoice() {
+       let printer = InvoicePrinter(invoice: self)
+        printer.printInvoice()
+    }
+    
+    func saveInvoice() {
+        let persistence = InvoicePersistence(invoice: self)
+        persistence.saveInvoice()
+    }
+}
+
+struct InvoicePrinter {
+    let invoice: Invoice
+    
+    func printInvoice() {
+        print("----------------------")
+        print("Invoice id: \(invoice.id)")
+        print("Total cost $\(invoice.total)")
+        print("Discounts: \(invoice.discountPercentage)")
+        print("----------------------")
+    }
+}
+
+struct InvoicePersistence {
+    let invoice: Invoice
+    func saveInvoice() {
+        // Save invoice data locally or to database
+    }
+}
+
+let products: [Product] = [
+    .init(price: 99.99),
+    .init(price: 9.99),
+    .init(price: 24.99)
+]
+
+let invoice = Invoice(products: products, discountPercentage: 20)
+invoice.printInvoice()
+
+let invoice2 = Invoice(products: products)
+invoice2.printInvoice()
+```
+
