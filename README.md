@@ -252,6 +252,80 @@ class Ostrich: Bird {
 }
 ```
 
+## Interface Segregation Principle (ISP)
+
+Do not force any client to implement an interface which is irrevelant to them.
+
+Unsuitable Code
+
+```swift
+protocol GestureProtocol {
+    func didTap()
+    func didDoubleTap()
+    func didLongPress()
+}
+
+struct SuperButton: GestureProtocol {
+    func didTap() {
+        
+    }
+    
+    func didDoubleTap() {
+        
+    }
+    
+    func didLongPress() {
+        
+    }
+}
+
+struct DoubleTapButton: GestureProtocol {
+    func didTap() { }
+    
+    func didDoubleTap() {
+        print("DEBUG: Double tap...is")
+    }
+    
+    func didLongPress() {}
+}
+```
+
+Suitable Code 
+
+```swift
+protocol SingleTapProtocol {
+    func didTap()
+}
+
+protocol DoubleTapProtocol {
+    func didDoubleTap()
+}
+
+protocol LongPressProtocol {
+    func didLongPress()
+}
+
+
+struct SuperBotton: SingleTapProtocol, DoubleTapProtocol, LongPressProtocol  {
+    func didTap() {
+        
+    }
+    
+    func didDoubleTap() {
+        
+    }
+    
+    func didLongPress() {
+        
+    }
+}
+
+struct DoubleTapButton: DoubleTapProtocol {
+    func didDoubleTap() {
+    }
+}
+```
+
 
 
 
