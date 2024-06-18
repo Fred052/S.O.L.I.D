@@ -326,6 +326,99 @@ struct DoubleTapButton: DoubleTapProtocol {
 }
 ```
 
+## Dependency Inversion Principle (DIP)
+
+Notes:
+- High-level modules should not depend on low-level modules, but should depend on abstraction
+- If a high-level module imports any low-level module then the code becomes tightly couped.
+- Changes in one class could break another class
+
+Unsuitable Code
+
+```swift
+class LightBulb {
+    func turnOn() {
+        print("LightBulb is turned on")
+    }
+    
+    func turnOff() {
+        print("LightBulb is turned off")
+    }
+}
+
+class Switch {
+    let lightBulb = LightBulb()
+    
+    func operate() {
+        lightBulb.turnOn()
+    }
+}
+```
+
+
+Suitable Code 
+
+```swift
+
+//Create an Abstraction
+
+protocol Switchable {
+    func turnOn()
+    func turnOff()
+}
+
+//Implement the Abstraction
+
+class LightBulb: Switchable {
+    func turnOn() {
+        print("LightBulb is turned on")
+    }
+    
+    func turnOff() {
+        print("LightBulb is turned off")
+    }
+}
+
+ //Depend on the Abstraction
+
+class Switch {
+    var device: Switchable
+    
+    init(device: Switchable) {
+        self.device = device
+    }
+    
+    func operate() {
+        device.turnOn()
+    }
+}
+
+ //Add Another Class to Demonstrate Flexibility
+
+class Fan: Switchable {
+    func turnOn() {
+        print("Fan is turned on")
+    }
+    
+    func turnOff() {
+        print("Fan is turned off")
+    }
+}
+
+// Inject Dependencies
+
+let lightBulb = LightBulb()
+let fan = Fan()
+
+let switchForLight = Switch(device: lightBulb)
+switchForLight.operate()  // Output: LightBulb is turned on
+
+let switchForFan = Switch(device: fan)
+switchForFan.operate()  // Output: Fan is turned on
+```
+
+
+
 
 
 
